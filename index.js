@@ -5,14 +5,16 @@ var Checker = require('jscs');
 var loadConfigFile = require('jscs/lib/cli-config');
 
 module.exports = function (options) {
-	var out = [];
-	var checker = new Checker();
-
-	checker.registerDefaultRules();
+	var out = [], checker;
 
 	if (typeof options === 'object') {
+		checker = options.esnext ? new Checker({esnext: true}) : new Checker();
+		delete options.esnext;
+		checker.registerDefaultRules();
 		checker.configure(options);
 	} else {
+		checker = new Checker();
+		checker.registerDefaultRules();
 		checker.configure(loadConfigFile.load(options));
 	}
 
